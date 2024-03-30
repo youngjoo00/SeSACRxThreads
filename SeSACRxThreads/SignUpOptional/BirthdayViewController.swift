@@ -7,108 +7,74 @@
  
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class BirthdayViewController: BaseViewController {
     
-    let birthDayPicker: UIDatePicker = {
-        let picker = UIDatePicker()
-        picker.datePickerMode = .date
-        picker.preferredDatePickerStyle = .wheels
-        picker.locale = Locale(identifier: "ko-KR")
-        picker.maximumDate = Date()
-        return picker
-    }()
+    private let mainView = BirthdayView()
+    private let viewModel = BirthdayViewModel()
     
-    let infoLabel: UILabel = {
-       let label = UILabel()
-        label.textColor = Color.black
-        label.text = "만 17세 이상만 가입 가능합니다."
-        return label
-    }()
-    
-    let containerStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        stack.spacing = 10 
-        return stack
-    }()
-    
-    let yearLabel: UILabel = {
-       let label = UILabel()
-        label.text = "2023년"
-        label.textColor = Color.black
-        label.snp.makeConstraints {
-            $0.width.equalTo(100)
-        }
-        return label
-    }()
-    
-    let monthLabel: UILabel = {
-       let label = UILabel()
-        label.text = "33월"
-        label.textColor = Color.black
-        label.snp.makeConstraints {
-            $0.width.equalTo(100)
-        }
-        return label
-    }()
-    
-    let dayLabel: UILabel = {
-       let label = UILabel()
-        label.text = "99일"
-        label.textColor = Color.black
-        label.snp.makeConstraints {
-            $0.width.equalTo(100)
-        }
-        return label
-    }()
-  
-    let nextButton = PointButton(title: "가입하기")
+    override func loadView() {
+        view = mainView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureLayout()
-        
-        nextButton.addTarget(self, action: #selector(nextButtonClicked), for: .touchUpInside)
+        bind()
     }
     
-    @objc func nextButtonClicked() {
-        print("가입완료")
-    }
+    private func bind() {
+        mainView.nextButton.rx.tap.bind(with: self) { owner, _ in
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
 
-    
-    func configureLayout() {
-        view.addSubview(infoLabel)
-        view.addSubview(containerStackView)
-        view.addSubview(birthDayPicker)
-        view.addSubview(nextButton)
- 
-        infoLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(150)
-            $0.centerX.equalToSuperview()
-        }
+            let tabBar = UITabBarController()
+
+            let firstTab = SampleViewController()
+            let firstTabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
+            firstTab.tabBarItem = firstTabBarItem
+            
+            tabBar.viewControllers = [firstTab]
+            
+            sceneDelegate?.window?.rootViewController = tabBar
+            sceneDelegate?.window?.makeKeyAndVisible()
+        }.disposed(by: disposeBag)
         
-        containerStackView.snp.makeConstraints {
-            $0.top.equalTo(infoLabel.snp.bottom).offset(30)
-            $0.centerX.equalToSuperview()
-        }
+        viewModel.year
+            .map { "\($0)년" }
+            .bind(to: mainView.yearLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        [yearLabel, monthLabel, dayLabel].forEach {
-            containerStackView.addArrangedSubview($0)
-        }
+        viewModel.month
+            .map { "\($0)월" }
+            .bind(to: mainView.monthLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        birthDayPicker.snp.makeConstraints {
-            $0.top.equalTo(containerStackView.snp.bottom)
-            $0.centerX.equalToSuperview()
-        }
-   
-        nextButton.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.top.equalTo(birthDayPicker.snp.bottom).offset(30)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
-        }
+        viewModel.day
+            .map { "\($0)일" }
+            .bind(to: mainView.dayLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // 만 17세 이상인지 아닌지 확인
+        viewModel.isInfo.bind(with: self) { owner, bool in
+            if bool {
+                owner.mainView.infoLabel.text = "가입 가능한 나이입니다."
+                owner.mainView.infoLabel.textColor = .blue
+                owner.mainView.nextButton.backgroundColor = .blue
+            } else {
+                owner.mainView.infoLabel.text = "만 17세 이상만 가입 가능합니다."
+                owner.mainView.infoLabel.textColor = .red
+                owner.mainView.nextButton.backgroundColor = .lightGray
+            }
+            owner.mainView.nextButton.isEnabled = bool
+        }.disposed(by: disposeBag)
+            
+        // 위에서 구독을 먼저 진행하고 난 뒤, date 값 보내면 PublishRelay 사용 가능
+        mainView.birthDayPicker.rx.date
+            .bind(to: viewModel.birthday)
+            .disposed(by: disposeBag)
     }
 
 }

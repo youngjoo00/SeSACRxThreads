@@ -28,6 +28,11 @@
 		041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280702AEFAD3D00972552 /* PhoneViewController.swift */; };
 		041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280722AEFAD4B00972552 /* NicknameViewController.swift */; };
 		041280782AF1D14000972552 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280772AF1D14000972552 /* Color.swift */; };
+		8E0388122BB83A8E00DA28D2 /* BirthdayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388112BB83A8E00DA28D2 /* BirthdayView.swift */; };
+		8E0388152BB83BFF00DA28D2 /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388142BB83BFF00DA28D2 /* SampleView.swift */; };
+		8E0388172BB83C1700DA28D2 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388162BB83C1600DA28D2 /* SampleViewController.swift */; };
+		8E0388192BB840FF00DA28D2 /* BirthdayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388182BB840FF00DA28D2 /* BirthdayViewModel.swift */; };
+		8E03881B2BB8412100DA28D2 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */; };
 		8EE4F3C62BB59098008B43A0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */; };
 		8EE4F3C92BB59189008B43A0 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C82BB59189008B43A0 /* BaseView.swift */; };
 		8EE4F3CC2BB591C6008B43A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 8EE4F3CB2BB591C6008B43A0 /* Then */; };
@@ -78,6 +83,11 @@
 		041280702AEFAD3D00972552 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		041280722AEFAD4B00972552 /* NicknameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewController.swift; sourceTree = "<group>"; };
 		041280772AF1D14000972552 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		8E0388112BB83A8E00DA28D2 /* BirthdayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayView.swift; sourceTree = "<group>"; };
+		8E0388142BB83BFF00DA28D2 /* SampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
+		8E0388162BB83C1600DA28D2 /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
+		8E0388182BB840FF00DA28D2 /* BirthdayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayViewModel.swift; sourceTree = "<group>"; };
+		8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8EE4F3C82BB59189008B43A0 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		8EE4F3CD2BB59237008B43A0 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
@@ -139,6 +149,7 @@
 		041280222AEF9BAB00972552 /* SeSACRxThreads */ = {
 			isa = PBXGroup;
 			children = (
+				8E0388132BB83BE000DA28D2 /* Sample */,
 				041280532AEF9C1F00972552 /* SignUp */,
 				041280542AEF9C2600972552 /* SignIn */,
 				0412806D2AEFAD0F00972552 /* SignUpOptional */,
@@ -148,6 +159,7 @@
 				0412802C2AEF9BAC00972552 /* Assets.xcassets */,
 				0412802E2AEF9BAC00972552 /* LaunchScreen.storyboard */,
 				041280312AEF9BAC00972552 /* Info.plist */,
+				8E03881C2BB8414B00DA28D2 /* Protocol */,
 				8EE4F3D82BB5C5DD008B43A0 /* Extension */,
 				8EE4F3C72BB5913B008B43A0 /* Enum */,
 				8EE4F3C42BB59035008B43A0 /* Base */,
@@ -206,7 +218,9 @@
 		0412806D2AEFAD0F00972552 /* SignUpOptional */ = {
 			isa = PBXGroup;
 			children = (
+				8E0388112BB83A8E00DA28D2 /* BirthdayView.swift */,
 				0412806E2AEFAD2D00972552 /* BirthdayViewController.swift */,
+				8E0388182BB840FF00DA28D2 /* BirthdayViewModel.swift */,
 				8EE4F3CF2BB59DB8008B43A0 /* PhoneView.swift */,
 				041280702AEFAD3D00972552 /* PhoneViewController.swift */,
 				041280722AEFAD4B00972552 /* NicknameViewController.swift */,
@@ -214,11 +228,28 @@
 			path = SignUpOptional;
 			sourceTree = "<group>";
 		};
+		8E0388132BB83BE000DA28D2 /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+				8E0388142BB83BFF00DA28D2 /* SampleView.swift */,
+				8E0388162BB83C1600DA28D2 /* SampleViewController.swift */,
+			);
+			path = Sample;
+			sourceTree = "<group>";
+		};
+		8E03881C2BB8414B00DA28D2 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		8EE4F3C42BB59035008B43A0 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */,
 				8EE4F3C82BB59189008B43A0 /* BaseView.swift */,
+				8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -384,7 +415,9 @@
 				0412806F2AEFAD2D00972552 /* BirthdayViewController.swift in Sources */,
 				041280652AEFA2F000972552 /* SignTextField.swift in Sources */,
 				0412806C2AEFABFE00972552 /* PasswordViewController.swift in Sources */,
+				8E0388152BB83BFF00DA28D2 /* SampleView.swift in Sources */,
 				041280562AEFA04800972552 /* SignInViewController.swift in Sources */,
+				8E03881B2BB8412100DA28D2 /* BaseViewModel.swift in Sources */,
 				8EE4F3C62BB59098008B43A0 /* BaseViewController.swift in Sources */,
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
 				8EE4F3D02BB59DB8008B43A0 /* PhoneView.swift in Sources */,
@@ -394,10 +427,13 @@
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
 				0412806A2AEFA91E00972552 /* SignUpViewController.swift in Sources */,
 				8EE4F3CE2BB59237008B43A0 /* PasswordView.swift in Sources */,
+				8E0388172BB83C1700DA28D2 /* SampleViewController.swift in Sources */,
 				8EE4F3DA2BB5C5EC008B43A0 /* UIViewController+.swift in Sources */,
+				8E0388122BB83A8E00DA28D2 /* BirthdayView.swift in Sources */,
 				041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */,
 				8EE4F3C92BB59189008B43A0 /* BaseView.swift in Sources */,
 				041280262AEF9BAB00972552 /* SceneDelegate.swift in Sources */,
+				8E0388192BB840FF00DA28D2 /* BirthdayViewModel.swift in Sources */,
 				8EE4F3D22BB5AE2B008B43A0 /* SignUpView.swift in Sources */,
 				041280582AEFA05300972552 /* SignInViewModel.swift in Sources */,
 			);
