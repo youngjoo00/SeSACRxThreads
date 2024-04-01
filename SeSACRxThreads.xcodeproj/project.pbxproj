@@ -34,6 +34,10 @@
 		8E0388192BB840FF00DA28D2 /* BirthdayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388182BB840FF00DA28D2 /* BirthdayViewModel.swift */; };
 		8E03881B2BB8412100DA28D2 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */; };
 		8E0388232BB87B1C00DA28D2 /* NicknameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0388222BB87B1C00DA28D2 /* NicknameView.swift */; };
+		8E16B1242BBAFC170046D86E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1222BBAFC160046D86E /* SearchViewController.swift */; };
+		8E16B1252BBAFC170046D86E /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1232BBAFC170046D86E /* SearchTableViewCell.swift */; };
+		8E16B1272BBAFC630046D86E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1262BBAFC630046D86E /* SearchView.swift */; };
+		8E16B1292BBAFC8E0046D86E /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1282BBAFC8E0046D86E /* BaseTableViewCell.swift */; };
 		8EE4F3C62BB59098008B43A0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */; };
 		8EE4F3C92BB59189008B43A0 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C82BB59189008B43A0 /* BaseView.swift */; };
 		8EE4F3CC2BB591C6008B43A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 8EE4F3CB2BB591C6008B43A0 /* Then */; };
@@ -90,6 +94,10 @@
 		8E0388182BB840FF00DA28D2 /* BirthdayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayViewModel.swift; sourceTree = "<group>"; };
 		8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		8E0388222BB87B1C00DA28D2 /* NicknameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameView.swift; sourceTree = "<group>"; };
+		8E16B1222BBAFC160046D86E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		8E16B1232BBAFC170046D86E /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		8E16B1262BBAFC630046D86E /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		8E16B1282BBAFC8E0046D86E /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8EE4F3C82BB59189008B43A0 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		8EE4F3CD2BB59237008B43A0 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
@@ -151,6 +159,7 @@
 		041280222AEF9BAB00972552 /* SeSACRxThreads */ = {
 			isa = PBXGroup;
 			children = (
+				8E16B1212BBAFC0B0046D86E /* Search */,
 				8E0388132BB83BE000DA28D2 /* Sample */,
 				041280532AEF9C1F00972552 /* SignUp */,
 				041280542AEF9C2600972552 /* SignIn */,
@@ -271,9 +280,20 @@
 			path = Nickname;
 			sourceTree = "<group>";
 		};
+		8E16B1212BBAFC0B0046D86E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				8E16B1262BBAFC630046D86E /* SearchView.swift */,
+				8E16B1222BBAFC160046D86E /* SearchViewController.swift */,
+				8E16B1232BBAFC170046D86E /* SearchTableViewCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		8EE4F3C42BB59035008B43A0 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				8E16B1282BBAFC8E0046D86E /* BaseTableViewCell.swift */,
 				8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */,
 				8EE4F3C82BB59189008B43A0 /* BaseView.swift */,
 				8E03881A2BB8412100DA28D2 /* BaseViewModel.swift */,
@@ -441,6 +461,8 @@
 				041280782AF1D14000972552 /* Color.swift in Sources */,
 				0412806F2AEFAD2D00972552 /* BirthdayViewController.swift in Sources */,
 				041280652AEFA2F000972552 /* SignTextField.swift in Sources */,
+				8E16B1272BBAFC630046D86E /* SearchView.swift in Sources */,
+				8E16B1242BBAFC170046D86E /* SearchViewController.swift in Sources */,
 				0412806C2AEFABFE00972552 /* PasswordViewController.swift in Sources */,
 				8E0388152BB83BFF00DA28D2 /* SampleView.swift in Sources */,
 				041280562AEFA04800972552 /* SignInViewController.swift in Sources */,
@@ -450,6 +472,7 @@
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
 				8EE4F3D02BB59DB8008B43A0 /* PhoneView.swift in Sources */,
 				041280632AEFA0CE00972552 /* PointButton.swift in Sources */,
+				8E16B1252BBAFC170046D86E /* SearchTableViewCell.swift in Sources */,
 				041280242AEF9BAB00972552 /* AppDelegate.swift in Sources */,
 				8EE4F3D42BB5BFE5008B43A0 /* SignInView.swift in Sources */,
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
@@ -463,6 +486,7 @@
 				041280262AEF9BAB00972552 /* SceneDelegate.swift in Sources */,
 				8E0388192BB840FF00DA28D2 /* BirthdayViewModel.swift in Sources */,
 				8EE4F3D22BB5AE2B008B43A0 /* SignUpView.swift in Sources */,
+				8E16B1292BBAFC8E0046D86E /* BaseTableViewCell.swift in Sources */,
 				041280582AEFA05300972552 /* SignInViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
