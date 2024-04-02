@@ -12,8 +12,6 @@ import RxCocoa
 
 final class SearchTableViewCell: BaseTableViewCell {
     
-    static let identifier = "SearchTableViewCell"
-    
     private let appNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .bold)
