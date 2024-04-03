@@ -13,9 +13,7 @@ import RxCocoa
 final class PhoneViewController: BaseViewController {
    
     private let mainView = PhoneView()
-    
-    private let validText = Observable.just("유효한 휴대폰 번호 형식이 아닙니다.")
-    private let initialText = Observable.just("010")
+    private let viewModel = PhoneViewModel()
     
     override func loadView() {
         view = mainView
@@ -36,28 +34,28 @@ final class PhoneViewController: BaseViewController {
             owner.navigationController?.pushViewController(NicknameViewController(), animated: true)
         }.disposed(by: disposeBag)
         
-        validText.bind(to: mainView.descriptionLabel.rx.text)
+        viewModel.outputInitialText
+            .asDriver()
+            .drive(mainView.phoneTextField.rx.text)
             .disposed(by: disposeBag)
         
-        initialText.bind(to: mainView.phoneTextField.rx.text)
-            .disposed(by: disposeBag)
-        
-        let valid = mainView.phoneTextField.rx.text
+        mainView.phoneTextField.rx.text
             .orEmpty
-            .map {
-                let isValid = $0.count >= 10 && $0.count <= 11
-                let isInteger = Int($0) != nil
-                let is010Number = $0.hasPrefix("010")
-                return isValid && isInteger && is010Number
-            }
-        
-        valid.bind(to: mainView.descriptionLabel.rx.isHidden, mainView.nextButton.rx.isEnabled)
+            .bind(to: viewModel.inputPhone)
             .disposed(by: disposeBag)
         
-        valid.bind(with: self) { owner, value in
-            let color: UIColor = value ? .systemPink : .lightGray
-            owner.mainView.nextButton.backgroundColor = color
-        }.disposed(by: disposeBag)
+        viewModel.outputValid
+            .asDriver()
+            .drive(with: self) { owner, value in
+                owner.mainView.descriptionLabel.isHidden = value
+                owner.mainView.descriptionLabel.text = value ? "" : "유효한 휴대폰 번호 형식이 아닙니다"
+                
+                owner.mainView.nextButton.isEnabled = value
+                
+                let color: UIColor = value ? .systemPink : .lightGray
+                owner.mainView.nextButton.backgroundColor = color
+            }
+            .disposed(by: disposeBag)
         
     }
 }

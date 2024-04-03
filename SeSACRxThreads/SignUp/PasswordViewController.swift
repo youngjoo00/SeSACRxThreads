@@ -13,8 +13,7 @@ import RxCocoa
 final class PasswordViewController: BaseViewController {
    
     private let mainView = PasswordView()
-   
-    private let validText = Observable.just("8자 이상 입력해주세요")
+    private let viewModel = PasswordViewModel()
     
     override func loadView() {
         view = mainView
@@ -37,19 +36,20 @@ final class PasswordViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         // validText 에서 값이 방출될 때 마다 descriptionLabel.rx.text 로 전달
-        validText.bind(to: mainView.descriptionLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        let valid = mainView.passwordTextField.rx.text
+        mainView.passwordTextField.rx.text
             .orEmpty
-            .map { $0.count >= 8 }
-        
-        valid.bind(to: mainView.nextButton.rx.isEnabled, mainView.descriptionLabel.rx.isHidden)
+            .bind(to: viewModel.inputPassword)
             .disposed(by: disposeBag)
         
-        valid.bind(with: self) { owner, value in
-            let color: UIColor = value ? .systemPink : .lightGray
-            owner.mainView.nextButton.backgroundColor = color
-        }.disposed(by: disposeBag)
+        viewModel.outputValid
+            .asDriver()
+            .drive(with: self) { owner, value in
+                owner.mainView.nextButton.isEnabled = value
+                owner.mainView.descriptionLabel.isHidden = value
+                owner.mainView.descriptionLabel.text = value ? "" : "비밀번호는 최소 5자 이상입니다"
+                let color: UIColor = value ? .systemPink : .lightGray
+                owner.mainView.nextButton.backgroundColor = color
+            }
+            .disposed(by: disposeBag)
     }
 }

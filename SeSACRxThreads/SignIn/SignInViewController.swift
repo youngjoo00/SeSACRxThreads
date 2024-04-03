@@ -13,8 +13,7 @@ import RxCocoa
 final class SignInViewController: BaseViewController {
 
     private let mainView = SignInView()
-    
-    private let minimalPasswordLength = 5
+    private let viewModel = SignInViewModel()
     
     override func loadView() {
         view = mainView
@@ -31,23 +30,28 @@ final class SignInViewController: BaseViewController {
             owner.navigationController?.pushViewController(SignUpViewController(), animated: true)
         }.disposed(by: disposeBag)
         
-        let emailValid = mainView.emailTextField.rx.text
+        mainView.emailTextField.rx.text
             .orEmpty
-            .map { self.validateEmail($0) }
-        
-        let passwordValid = mainView.passwordTextField.rx.text
-            .orEmpty
-            .map { $0.count >= self.minimalPasswordLength }
-        
-        let everyThingValid = Observable.combineLatest(emailValid, passwordValid) { $0 && $1 }
-        
-        emailValid.bind(to: mainView.emailValidLabel.rx.isHidden)
+            .bind(to: viewModel.inputEmail)
             .disposed(by: disposeBag)
         
-        passwordValid.bind(to: mainView.passwordValidLabel.rx.isHidden)
+        mainView.passwordTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.inputPassword)
             .disposed(by: disposeBag)
         
-        everyThingValid.bind(to: mainView.signInButton.rx.isEnabled)
+        viewModel.outputEmailValid.bind(to: mainView.emailValidLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputPasswordValid.bind(to: mainView.passwordValidLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputSignInValid
+            .asDriver()
+            .drive(with: self) { owner, value in
+                owner.mainView.signInButton.backgroundColor = value ? .systemPink : .lightGray
+                owner.mainView.signInButton.isEnabled = value
+            }
             .disposed(by: disposeBag)
         
         mainView.signInButton.rx.tap.bind(with: self) { owner, _ in

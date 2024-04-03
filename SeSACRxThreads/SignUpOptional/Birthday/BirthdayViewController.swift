@@ -36,33 +36,37 @@ final class BirthdayViewController: BaseViewController {
             let firstTabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
             firstTab.tabBarItem = firstTabBarItem
             
-            tabBar.viewControllers = [firstTab]
+            let secondTab = ShoppingViewController()
+            let secondTabBarItem = UITabBarItem(title: "Shop", image: UIImage(systemName: "house"), tag: 1)
+            secondTab.tabBarItem = secondTabBarItem
+            
+            tabBar.viewControllers = [firstTab, secondTab]
             
             sceneDelegate?.window?.rootViewController = tabBar
             sceneDelegate?.window?.makeKeyAndVisible()
         }.disposed(by: disposeBag)
         
-        viewModel.year
-            .map { "\($0)년" }
-            .bind(to: mainView.yearLabel.rx.text)
+        viewModel.outputYear
+            .asDriver(onErrorJustReturn: "0000년")
+            .drive(mainView.yearLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.month
-            .map { "\($0)월" }
-            .bind(to: mainView.monthLabel.rx.text)
+        viewModel.outputMonth
+            .asDriver(onErrorJustReturn: "00월")
+            .drive(mainView.monthLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.day
-            .map { "\($0)일" }
-            .bind(to: mainView.dayLabel.rx.text)
+        viewModel.outputDay
+            .asDriver(onErrorJustReturn: "00일")
+            .drive(mainView.dayLabel.rx.text)
             .disposed(by: disposeBag)
         
         // 만 17세 이상인지 아닌지 확인
-        viewModel.isInfo.bind(with: self) { owner, bool in
+        viewModel.outputIsInfo.bind(with: self) { owner, bool in
             if bool {
                 owner.mainView.infoLabel.text = "가입 가능한 나이입니다."
-                owner.mainView.infoLabel.textColor = .blue
-                owner.mainView.nextButton.backgroundColor = .blue
+                owner.mainView.infoLabel.textColor = .systemPink
+                owner.mainView.nextButton.backgroundColor = .systemPink
             } else {
                 owner.mainView.infoLabel.text = "만 17세 이상만 가입 가능합니다."
                 owner.mainView.infoLabel.textColor = .red
@@ -73,7 +77,7 @@ final class BirthdayViewController: BaseViewController {
             
         // 위에서 구독을 먼저 진행하고 난 뒤, date 값 보내면 PublishRelay 사용 가능
         mainView.birthDayPicker.rx.date
-            .bind(to: viewModel.birthday)
+            .bind(to: viewModel.inputBirthday)
             .disposed(by: disposeBag)
     }
 

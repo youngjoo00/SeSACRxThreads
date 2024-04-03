@@ -48,6 +48,11 @@
 		8E16B13B2BBC566D0046D86E /* RxDataSources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B13A2BBC566D0046D86E /* RxDataSources.swift */; };
 		8E16B1412BBC61230046D86E /* DetailShoppingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1402BBC61230046D86E /* DetailShoppingView.swift */; };
 		8E16B1432BBC61300046D86E /* DetailShoppingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1422BBC61300046D86E /* DetailShoppingViewController.swift */; };
+		8E16B14D2BBD8DF00046D86E /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B14C2BBD8DF00046D86E /* SignUpViewModel.swift */; };
+		8E16B1512BBD95EC0046D86E /* ViewModel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1502BBD95EC0046D86E /* ViewModel+.swift */; };
+		8E16B1532BBDA5780046D86E /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1522BBDA5780046D86E /* PasswordViewModel.swift */; };
+		8E16B1552BBDAF2D0046D86E /* PhoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1542BBDAF2D0046D86E /* PhoneViewModel.swift */; };
+		8E16B1572BBDB5100046D86E /* NicknameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E16B1562BBDB5100046D86E /* NicknameViewModel.swift */; };
 		8EE4F3C62BB59098008B43A0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */; };
 		8EE4F3C92BB59189008B43A0 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE4F3C82BB59189008B43A0 /* BaseView.swift */; };
 		8EE4F3CC2BB591C6008B43A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 8EE4F3CB2BB591C6008B43A0 /* Then */; };
@@ -117,6 +122,11 @@
 		8E16B13A2BBC566D0046D86E /* RxDataSources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxDataSources.swift; sourceTree = "<group>"; };
 		8E16B1402BBC61230046D86E /* DetailShoppingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailShoppingView.swift; sourceTree = "<group>"; };
 		8E16B1422BBC61300046D86E /* DetailShoppingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailShoppingViewController.swift; sourceTree = "<group>"; };
+		8E16B14C2BBD8DF00046D86E /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		8E16B1502BBD95EC0046D86E /* ViewModel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModel+.swift"; sourceTree = "<group>"; };
+		8E16B1522BBDA5780046D86E /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
+		8E16B1542BBDAF2D0046D86E /* PhoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewModel.swift; sourceTree = "<group>"; };
+		8E16B1562BBDB5100046D86E /* NicknameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewModel.swift; sourceTree = "<group>"; };
 		8EE4F3C52BB59098008B43A0 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8EE4F3C82BB59189008B43A0 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		8EE4F3CD2BB59237008B43A0 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
@@ -222,8 +232,10 @@
 			children = (
 				8EE4F3D12BB5AE2B008B43A0 /* SignUpView.swift */,
 				041280692AEFA91E00972552 /* SignUpViewController.swift */,
+				8E16B14C2BBD8DF00046D86E /* SignUpViewModel.swift */,
 				8EE4F3CD2BB59237008B43A0 /* PasswordView.swift */,
 				0412806B2AEFABFE00972552 /* PasswordViewController.swift */,
+				8E16B1522BBDA5780046D86E /* PasswordViewModel.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -288,6 +300,7 @@
 			children = (
 				8EE4F3CF2BB59DB8008B43A0 /* PhoneView.swift */,
 				041280702AEFAD3D00972552 /* PhoneViewController.swift */,
+				8E16B1542BBDAF2D0046D86E /* PhoneViewModel.swift */,
 			);
 			path = Phone;
 			sourceTree = "<group>";
@@ -297,6 +310,7 @@
 			children = (
 				8E0388222BB87B1C00DA28D2 /* NicknameView.swift */,
 				041280722AEFAD4B00972552 /* NicknameViewController.swift */,
+				8E16B1562BBDB5100046D86E /* NicknameViewModel.swift */,
 			);
 			path = Nickname;
 			sourceTree = "<group>";
@@ -358,6 +372,7 @@
 				8EE4F3D92BB5C5EC008B43A0 /* UIViewController+.swift */,
 				8E16B12F2BBC2F2B0046D86E /* UITextField+.swift */,
 				8E16B1332BBC31660046D86E /* Identifier.swift */,
+				8E16B1502BBD95EC0046D86E /* ViewModel+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -505,8 +520,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E16B1572BBDB5100046D86E /* NicknameViewModel.swift in Sources */,
 				041280782AF1D14000972552 /* Color.swift in Sources */,
+				8E16B1532BBDA5780046D86E /* PasswordViewModel.swift in Sources */,
 				8E16B1392BBC49B20046D86E /* Shopping.swift in Sources */,
+				8E16B14D2BBD8DF00046D86E /* SignUpViewModel.swift in Sources */,
 				0412806F2AEFAD2D00972552 /* BirthdayViewController.swift in Sources */,
 				041280652AEFA2F000972552 /* SignTextField.swift in Sources */,
 				8E16B1272BBAFC630046D86E /* SearchView.swift in Sources */,
@@ -519,6 +537,7 @@
 				8EE4F3C62BB59098008B43A0 /* BaseViewController.swift in Sources */,
 				8E16B1432BBC61300046D86E /* DetailShoppingViewController.swift in Sources */,
 				8E0388232BB87B1C00DA28D2 /* NicknameView.swift in Sources */,
+				8E16B1552BBDAF2D0046D86E /* PhoneViewModel.swift in Sources */,
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
 				8EE4F3D02BB59DB8008B43A0 /* PhoneView.swift in Sources */,
 				041280632AEFA0CE00972552 /* PointButton.swift in Sources */,
@@ -537,6 +556,7 @@
 				8EE4F3DA2BB5C5EC008B43A0 /* UIViewController+.swift in Sources */,
 				8E0388122BB83A8E00DA28D2 /* BirthdayView.swift in Sources */,
 				041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */,
+				8E16B1512BBD95EC0046D86E /* ViewModel+.swift in Sources */,
 				8EE4F3C92BB59189008B43A0 /* BaseView.swift in Sources */,
 				041280262AEF9BAB00972552 /* SceneDelegate.swift in Sources */,
 				8E0388192BB840FF00DA28D2 /* BirthdayViewModel.swift in Sources */,

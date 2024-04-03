@@ -13,9 +13,8 @@ import RxCocoa
 final class NicknameViewController: BaseViewController {
     
     private let mainView = NicknameView()
-    
-    private let validText = Observable.just("닉네임은 두 글자 이상부터 가능합니다.")
-    
+    private let viewModel = NicknameViewModel()
+        
     override func loadView() {
         view = mainView
     }
@@ -32,19 +31,21 @@ final class NicknameViewController: BaseViewController {
                 owner.navigationController?.pushViewController(BirthdayViewController(), animated: true)
             }.disposed(by: disposeBag)
         
-        validText.bind(to: mainView.descriptionLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        let valid = mainView.nicknameTextField.rx.text
+        mainView.nicknameTextField.rx.text
             .orEmpty
-            .map { $0.count >= 2 }
-        
-        valid.bind(to: mainView.descriptionLabel.rx.isHidden, mainView.nextButton.rx.isEnabled)
+            .bind(to: viewModel.inputNickanme)
             .disposed(by: disposeBag)
         
-        valid
-            .map{ $0 ? UIColor.blue : UIColor.lightGray }
-            .bind(to: mainView.nextButton.rx.backgroundColor)
+        viewModel.outputValid
+            .asDriver()
+            .drive(with: self) { owner, value in
+                owner.mainView.descriptionLabel.isHidden = value
+                owner.mainView.descriptionLabel.text = value ? "" : "닉네임은 두 글자 이상입니다"
+                owner.mainView.nextButton.isEnabled = value
+                
+                let color = value ? UIColor.systemPink : UIColor.lightGray
+                owner.mainView.nextButton.backgroundColor = color
+            }
             .disposed(by: disposeBag)
     }
     

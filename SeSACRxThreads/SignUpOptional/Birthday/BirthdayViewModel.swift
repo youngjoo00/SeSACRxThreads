@@ -11,12 +11,12 @@ import RxRelay
 
 final class BirthdayViewModel: BaseViewModel {
     
-    let birthday: BehaviorSubject<Date> = BehaviorSubject(value: .now)
+    let inputBirthday: BehaviorSubject<Date> = BehaviorSubject(value: .now)
     
-    let isInfo = PublishRelay<Bool>()
-    let year = PublishRelay<Int>()
-    let month = PublishRelay<Int>()
-    let day = PublishRelay<Int>()
+    let outputIsInfo = PublishRelay<Bool>()
+    let outputYear = PublishRelay<String>()
+    let outputMonth = PublishRelay<String>()
+    let outputDay = PublishRelay<String>()
     
     override init() {
         super.init()
@@ -24,28 +24,25 @@ final class BirthdayViewModel: BaseViewModel {
     }
     
     private func transform() {
-        birthday.subscribe(with: self) { owner, date in
+        inputBirthday.subscribe(with: self) { owner, date in
             let birth = Calendar.current.dateComponents([.year, .month, .day], from: date)
             let now = Calendar.current.dateComponents([.year, .month, .day], from: .now)
 
             guard let birthYear = birth.year, let birthMonth = birth.month, let birthDay = birth.day,
                   let nowYear = now.year, let nowMonth = now.month, let nowDay = now.day else { return }
             
-            owner.year.accept(birthYear)
-            owner.month.accept(birthMonth)
-            owner.day.accept(birthDay)
+            owner.outputYear.accept("\(birthYear)년")
+            owner.outputMonth.accept("\(birthMonth)월")
+            owner.outputDay.accept("\(birthDay)일")
             
             let possibleYear = nowYear - 17
             if (birthYear < possibleYear) ||
                 (birthYear == possibleYear && birthMonth < nowMonth) ||
                 (birthYear == possibleYear && birthMonth == nowMonth && birthDay < nowDay) {
-                owner.isInfo.accept(true)
+                owner.outputIsInfo.accept(true)
             } else {
-                owner.isInfo.accept(false)
+                owner.outputIsInfo.accept(false)
             }
-            
-        } onDisposed: { owner in
-            print("birthday dispose")
         }
         .disposed(by: disposeBag)
     }

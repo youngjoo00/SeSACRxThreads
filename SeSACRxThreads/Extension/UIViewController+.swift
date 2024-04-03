@@ -8,14 +8,6 @@
 import UIKit
 
 extension BaseViewController {
-    // 이메일 정규성 체크
-    func validateEmail(_ input: String) -> Bool {
-        let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", regex)
-        let isValid = emailPredicate.evaluate(with: input)
-
-        return isValid
-    }
     
     func showAlert(title: String?, message: String?, btnTitle: String?, complectionHandler: @escaping () -> Void) {
         

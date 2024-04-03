@@ -34,7 +34,6 @@ final class ShoppingViewController: BaseViewController {
         navigationItem.titleView = mainView.searchBar
     }
     
-    // MVVM 감이 안잡히네요,,
     private func bind() {
         
         // addButton Tap
