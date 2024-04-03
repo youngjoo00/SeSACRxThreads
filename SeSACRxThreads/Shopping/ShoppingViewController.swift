@@ -11,12 +11,8 @@ import RxCocoa
 
 final class ShoppingViewController: BaseViewController {
     
-    private var data = [
-        Shopping(complete: false, todo: "할 일을 추가해보세요", favorite: false)
-    ]
-    
-    private lazy var items = BehaviorSubject(value: data)
     private let mainView = ShoppingView()
+    private let viewModel = ShoppingViewModel()
     
     override func loadView() {
         view = mainView
@@ -36,52 +32,44 @@ final class ShoppingViewController: BaseViewController {
     
     private func bind() {
         
-        // addButton Tap
-        mainView.addButton.rx.tap
-            .withLatestFrom(mainView.textField.rx.text.orEmpty)
-            .bind(with: self) { owner, text in
-                if !text.isEmpty {
-                    let newData = Shopping(complete: false, todo: text, favorite: false)
-                    owner.data.append(newData)
-                    owner.items.onNext(owner.data)
-                }
-            }
-            .disposed(by: disposeBag)
-        
         // TableView.dequeReuseable
-        items
+        viewModel.items
             .bind(to: mainView.tableView.rx.items(cellIdentifier: ShoppingTableViewCell.identifier,
                                                   cellType: ShoppingTableViewCell.self)) { row, element, cell in
                 cell.configureCell(element)
                 
                 cell.completeButton.rx.tap
-                    .map { element.complete }
-                    .subscribe(with: self) { owner, value in
-                        print(value)
-                        owner.data[row].complete.toggle()
-                        owner.items.onNext(owner.data)
+                    .map { row }
+                    .bind(with: self) { owner, index in
+                        owner.viewModel.completeButtonTap(index)
                     }
                     .disposed(by: cell.disposeBag)
                 
                 cell.favoriteButton.rx.tap
-                    .map { element.favorite }
-                    .subscribe(with: self) { owner, value in
-                        owner.data[row].favorite.toggle()
-                        owner.items.onNext(owner.data)
+                    .map { row }
+                    .bind(with: self) { owner, index in
+                        owner.viewModel.favoriteButtonTap(index)
                     }
                     .disposed(by: cell.disposeBag)
             }
         .disposed(by: disposeBag)
         
-        // RealTime Search
+        mainView.addButton.rx.tap
+            .bind(to: viewModel.inputAddButtonTap)
+            .disposed(by: disposeBag)
+        
+        mainView.textField.rx.text
+            .orEmpty
+            .bind(to: viewModel.inputTextFieldText)
+            .disposed(by: disposeBag)
+        
         mainView.searchBar.rx.text
             .orEmpty
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .distinctUntilChanged()
-            .subscribe(with: self) { owner, text in
-                let filterData = text.isEmpty ? owner.data : owner.data.filter { $0.todo.contains(text) }
-                owner.items.onNext(filterData)
-            }
+            .bind(to: viewModel.inputSearchText)
+            .disposed(by: disposeBag)
+        
+        mainView.searchBar.rx.searchButtonClicked
+            .bind(to: viewModel.inputSearchButtonTap)
             .disposed(by: disposeBag)
         
         // Cell Select
@@ -110,9 +98,12 @@ extension ShoppingViewController: UITableViewDelegate {
             let alert = UIAlertController(title: nil, message: "할 일을 수정합니다", preferredStyle: .alert)
             
             let update = UIAlertAction(title: "수정", style: .default) { action in
-                let updatedNames = self.mainView.changeTextField.text
-                self.data[indexPath.row].todo = updatedNames ?? ""
-                self.items.onNext(self.data)
+                self.mainView.changeTextField.rx.text
+                    .orEmpty
+                    .bind(with: self) { owner, text in
+                        owner.viewModel.updateTodo(indexPath.row, text: text)
+                    }
+                    .disposed(by: self.disposeBag)
             }
             
             let cancel = UIAlertAction(title: "취소", style: .cancel)
@@ -121,7 +112,7 @@ extension ShoppingViewController: UITableViewDelegate {
             alert.addAction(cancel)
             alert.addTextField { textField in
                 self.mainView.changeTextField = textField
-                self.mainView.changeTextField.text = self.data[indexPath.row].todo
+                self.mainView.changeTextField.text = self.viewModel.data[indexPath.row].todo
                 self.mainView.changeTextField.placeholder = "할 일을 작성하세요"
             }
             present(alert, animated: true)
@@ -133,8 +124,7 @@ extension ShoppingViewController: UITableViewDelegate {
             guard let self else { return }
             
             showAlert(title: "삭제", message: "할 일을 삭제하시겠습니까?", btnTitle: "삭제") {
-                self.data.remove(at: indexPath.row)
-                self.items.onNext(self.data)
+                self.viewModel.deleteTodo(indexPath.row)
             }
             completion(true)
         }
