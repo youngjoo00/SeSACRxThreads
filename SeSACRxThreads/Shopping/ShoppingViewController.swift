@@ -103,7 +103,7 @@ extension ShoppingViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        // Edit Flow
+        // Edit
         let editAction = UIContextualAction(style: .normal, title: "수정") { [weak self] action, view, completion in
             guard let self else { return }
             
@@ -129,7 +129,7 @@ extension ShoppingViewController: UITableViewDelegate {
             completion(true)
         }
         
-        // Delete Flow
+        // Delete
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] action, view, completion in
             guard let self else { return }
             
