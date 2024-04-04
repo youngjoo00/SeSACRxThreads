@@ -10,48 +10,63 @@ import RxCocoa
 
 final class SignUpViewModel: BaseViewModel {
     
-    // input
-    let inputEmail = PublishSubject<String>()
-    let inputValidButtonTap = PublishSubject<Void>()
+    struct Input {
+        let email: ControlProperty<String?>
+        let validationButtonTap: ControlEvent<Void>
+        let nextButtonTap: ControlEvent<Void>
+        let nextButtonEnabled: Observable<Void>
+    }
     
-    // output
-    let outputValidText = BehaviorRelay(value: "유효한 형식이 아닙니다.")
-    let outputValidButton = BehaviorRelay(value: false)
-    let outputValidNextButton = BehaviorRelay(value: false)
+    struct Output {
+        let valid: Driver<Bool>
+        let description: Driver<String>
+        let validationButtonTap: ControlEvent<Void>
+        let nextButtonTap: ControlEvent<Void>
+        let nextButtonEnabled: Driver<Bool>
+    }
     
     override init() {
         super.init()
-        
-        transform()
     }
     
-    private func transform() {
-        inputEmail
-            .subscribe(with: self) { owner, text in
-                owner.emailTextValid(text)
-            }
-            .disposed(by: disposeBag)
+    func transform(input: Input) -> Output {
         
-        inputValidButtonTap
-            .subscribe(with: self) { owner, _ in
-                owner.outputValidNextButton.accept(true)
+        let valid = input.email
+            .orEmpty
+            .map { [weak self] email in
+                return self?.validateEmail(email) ?? false
             }
-            .disposed(by: disposeBag)
+            .asDriver(onErrorJustReturn: false)
+        
+        let description = valid
+            .map { $0 ? "" : "유효하지 않은 이메일 형식입니다" }
+            .asDriver()
+        
+        let nextButtonEnabled = input.nextButtonEnabled
+            .map { true }
+            .asDriver(onErrorJustReturn: false)
+
+        return Output(valid: valid,
+                      description: description,
+                      validationButtonTap: input.validationButtonTap,
+                      nextButtonTap: input.nextButtonTap,
+                      nextButtonEnabled: nextButtonEnabled
+        )
     }
     
 }
 
-extension SignUpViewModel {
-    
-    private func emailTextValid(_ text: String) {
-        let isValid = validateEmail(text)
-        
-        outputValidText.accept(isValid ? "" : "유효한 형식이 아닙니다.")
-        outputValidButton.accept(isValid)
-        
-        guard isValid else {
-            return outputValidNextButton.accept(false)
-        }
-        
-    }
-}
+//extension SignUpViewModel {
+//    
+//    private func emailTextValid(_ text: String) {
+//        let isValid = validateEmail(text)
+//        
+//        outputValidText.accept(isValid ? "" : "유효한 형식이 아닙니다.")
+//        outputValidButton.accept(isValid)
+//        
+//        guard isValid else {
+//            return outputValidNextButton.accept(false)
+//        }
+//        
+//    }
+//}

@@ -32,45 +32,35 @@ final class ShoppingViewController: BaseViewController {
     
     private func bind() {
         
+        let input = ShoppingViewModel.Input(searchText: mainView.searchBar.rx.text,
+                                            todoText: mainView.textField.rx.text,
+                                            addButtonTap: mainView.addButton.rx.tap,
+                                            searchButtonTap: mainView.searchBar.rx.searchButtonClicked)
+        
+        let output = viewModel.transform(input: input)
+        
         // TableView.dequeReuseable
-        viewModel.items
-            .bind(to: mainView.tableView.rx.items(cellIdentifier: ShoppingTableViewCell.identifier,
-                                                  cellType: ShoppingTableViewCell.self)) { row, element, cell in
-                cell.configureCell(element)
-                
-                cell.completeButton.rx.tap
-                    .map { row }
-                    .bind(with: self) { owner, index in
-                        owner.viewModel.completeButtonTap(index)
-                    }
-                    .disposed(by: cell.disposeBag)
-                
-                cell.favoriteButton.rx.tap
-                    .map { row }
-                    .bind(with: self) { owner, index in
-                        owner.viewModel.favoriteButtonTap(index)
-                    }
-                    .disposed(by: cell.disposeBag)
+        output.items
+            .drive(mainView.tableView.rx.items(cellIdentifier: ShoppingTableViewCell.identifier,
+                                               cellType: ShoppingTableViewCell.self)) { row, element, cell in
+                print(element)
+             cell.configureCell(element)
+             
+             cell.completeButton.rx.tap
+                 .map { row }
+                 .bind(with: self) { owner, index in
+                     owner.viewModel.completeButtonTap(index)
+                 }
+                 .disposed(by: cell.disposeBag)
+             
+             cell.favoriteButton.rx.tap
+                 .map { row }
+                 .bind(with: self) { owner, index in
+                     owner.viewModel.favoriteButtonTap(index)
+                 }
+                 .disposed(by: cell.disposeBag)
             }
         .disposed(by: disposeBag)
-        
-        mainView.addButton.rx.tap
-            .bind(to: viewModel.inputAddButtonTap)
-            .disposed(by: disposeBag)
-        
-        mainView.textField.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputTextFieldText)
-            .disposed(by: disposeBag)
-        
-        mainView.searchBar.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputSearchText)
-            .disposed(by: disposeBag)
-        
-        mainView.searchBar.rx.searchButtonClicked
-            .bind(to: viewModel.inputSearchButtonTap)
-            .disposed(by: disposeBag)
         
         // Cell Select
         Observable.zip(mainView.tableView.rx.itemSelected, mainView.tableView.rx.modelSelected(Shopping.self))

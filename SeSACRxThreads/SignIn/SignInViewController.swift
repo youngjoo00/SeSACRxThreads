@@ -26,37 +26,34 @@ final class SignInViewController: BaseViewController {
     }
 
     private func bind() {
-        mainView.signUpButton.rx.tap.bind(with: self) { owner, _ in
-            owner.navigationController?.pushViewController(SignUpViewController(), animated: true)
-        }.disposed(by: disposeBag)
         
-        mainView.emailTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputEmail)
+        let input = SignInViewModel.Input(email: mainView.emailTextField.rx.text,
+                                          password: mainView.passwordTextField.rx.text,
+                                          signUpButtonTap: mainView.signUpButton.rx.tap,
+                                          signInButtonTap: mainView.signInButton.rx.tap)
+        
+        let output = viewModel.transform(input: input)
+    
+        output.enabled
+            .drive(mainView.signInButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        mainView.passwordTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputPassword)
+        output.enabled
+            .map { $0 ? UIColor.systemPink : UIColor.lightGray }
+            .drive(mainView.signInButton.rx.backgroundColor)
             .disposed(by: disposeBag)
         
-        viewModel.outputEmailValid.bind(to: mainView.emailValidLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputPasswordValid.bind(to: mainView.passwordValidLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputSignInValid
-            .asDriver()
-            .drive(with: self) { owner, value in
-                owner.mainView.signInButton.backgroundColor = value ? .systemPink : .lightGray
-                owner.mainView.signInButton.isEnabled = value
+        output.signUpButtonTap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(SignUpViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        mainView.signInButton.rx.tap.bind(with: self) { owner, _ in
-            owner.showAlert(title: "로그인 성공!")
-        }.disposed(by: disposeBag)
+        output.signInButtonTap
+            .bind(with: self) { owner, _ in
+                owner.showAlert(title: "로그인 성공!")
+            }
+            .disposed(by: disposeBag)
     }
     
 }

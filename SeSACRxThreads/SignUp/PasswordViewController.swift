@@ -26,30 +26,29 @@ final class PasswordViewController: BaseViewController {
     }
 
     private func bind() {
-//        descriptionLabel ValidText
-//        비번 8자 이상
-//        조건 안맞으면, NextButton LightGray, descriptionLabel 로 상태를 알려줌
-//        비번 조건 맞추면, nextButton Pick - 클릭가능 , descriotionLabel ishidden
         
-        mainView.nextButton.rx.tap.bind(with: self) { owner, _ in
-            owner.navigationController?.pushViewController(PhoneViewController(), animated: true)
-        }.disposed(by: disposeBag)
+        let input = PasswordViewModel.Input(password: mainView.passwordTextField.rx.text, 
+                                            nextButtonTap: mainView.nextButton.rx.tap)
         
-        // validText 에서 값이 방출될 때 마다 descriptionLabel.rx.text 로 전달
-        mainView.passwordTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputPassword)
+        let output = viewModel.transform(input: input)
+        
+        output.nextButtonTap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(PhoneViewController(), animated: true)
+            }
             .disposed(by: disposeBag)
         
-        viewModel.outputValid
-            .asDriver()
-            .drive(with: self) { owner, value in
-                owner.mainView.nextButton.isEnabled = value
-                owner.mainView.descriptionLabel.isHidden = value
-                owner.mainView.descriptionLabel.text = value ? "" : "비밀번호는 최소 5자 이상입니다"
-                let color: UIColor = value ? .systemPink : .lightGray
-                owner.mainView.nextButton.backgroundColor = color
-            }
+        output.description
+            .drive(mainView.descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.valid
+            .drive(mainView.nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.valid
+            .map { $0 ? UIColor.systemPink : UIColor.lightGray }
+            .drive(mainView.nextButton.rx.backgroundColor)
             .disposed(by: disposeBag)
     }
 }

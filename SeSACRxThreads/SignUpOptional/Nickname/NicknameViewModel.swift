@@ -11,22 +11,33 @@ import RxCocoa
 
 final class NicknameViewModel: BaseViewModel {
     
-    let inputNickanme = PublishSubject<String>()
+    struct Input {
+        let nickname: ControlProperty<String?>
+        let nextButtonTap: ControlEvent<Void>
+    }
     
-    let outputValid = BehaviorRelay(value: false)
+    struct Output {
+        let valid: Driver<Bool>
+        let description: Driver<String>
+        let nextButtonTap: ControlEvent<Void>
+    }
     
     override init() {
         super.init()
-        
-        transform()
     }
     
-    private func transform() {
-        inputNickanme
-            .map { $0.count >= 2}
-            .subscribe(with: self) { owner, value in
-                owner.outputValid.accept(value)
-            }
-            .disposed(by: disposeBag)
+    func transform(input: Input) -> Output {
+        let valid = input.nickname
+            .orEmpty
+            .map { $0.count >= 2 }
+            .asDriver(onErrorJustReturn: false)
+        
+        let description = valid
+            .map { $0 ? "" : "닉네임은 최소 두 글자 이상입니다" }
+            .asDriver()
+        
+        return Output(valid: valid, 
+                      description: description, 
+                      nextButtonTap: input.nextButtonTap)
     }
 }

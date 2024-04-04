@@ -11,22 +11,33 @@ import RxCocoa
 
 final class PasswordViewModel: BaseViewModel {
 
-    let inputPassword = PublishSubject<String>()
+    struct Input {
+        let password: ControlProperty<String?>
+        let nextButtonTap: ControlEvent<Void>
+    }
     
-    let outputValid = BehaviorRelay(value: false)
+    struct Output {
+        let valid: Driver<Bool>
+        let description: Driver<String>
+        let nextButtonTap: ControlEvent<Void>
+    }
 
     override init() {
         super.init()
-        
-        transform()
     }
     
-    private func transform() {
-        inputPassword
+    func transform(input: Input) -> Output {
+        let valid = input.password
+            .orEmpty
             .map { $0.count >= 5 }
-            .subscribe(with: self) { owner, value in
-                owner.outputValid.accept(value)
-            }
-            .disposed(by: disposeBag)
+            .asDriver(onErrorJustReturn: false)
+        
+        let description = valid
+            .map { $0 ? "" : "비밀번호는 최소 5자 이상입니다" }
+            .asDriver(onErrorJustReturn: "")
+        
+        return Output(valid: valid, 
+                      description: description,
+                      nextButtonTap: input.nextButtonTap)
     }
 }

@@ -26,40 +26,46 @@ final class SignUpViewController: BaseViewController {
     }
     
     private func bind() {
-        mainView.nextButton.rx.tap.bind(with: self) { owner, _ in
-            owner.navigationController?.pushViewController(PasswordViewController(), animated: true)
-        }.disposed(by: disposeBag)
         
-        mainView.emailTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.inputEmail)
+        let input = SignUpViewModel.Input(email: mainView.emailTextField.rx.text,
+                                          validationButtonTap: mainView.validationButton.rx.tap,
+                                          nextButtonTap: mainView.nextButton.rx.tap, 
+                                          nextButtonEnabled: Observable.just(())
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.valid
+            .map { $0 ? UIColor.systemPink : UIColor.systemGray }
+            .drive(mainView.validationButton.rx.backgroundColor)
             .disposed(by: disposeBag)
         
-        viewModel.outputValidText
-            .asDriver(onErrorJustReturn: "")
-            .drive(mainView.descriptionLabel.rx.text)
+        output.valid
+            .drive(mainView.validationButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        viewModel.outputValidButton
-            .asDriver()
-            .drive(with: self) { owner, value in
-                owner.mainView.validationButton.setTitleColor(value ? .systemPink : .systemGray, for: .normal)
-                owner.mainView.validationButton.isEnabled = value
+        output.nextButtonTap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(PasswordViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        mainView.validationButton.rx.tap
+        output.description
+            .drive(mainView.descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.validationButtonTap
             .bind(with: self) { owner, _ in
                 owner.showAlert(title: "성공!")
-                owner.viewModel.inputValidButtonTap.onNext(())
-            }.disposed(by: disposeBag)
-        
-        viewModel.outputValidNextButton
-            .asDriver()
-            .drive(with: self, onNext: { owner, value in
-                owner.mainView.nextButton.backgroundColor = value ? .systemPink : .lightGray
-                owner.mainView.nextButton.isEnabled = value
-            })
+            }
             .disposed(by: disposeBag)
+        
+//        viewModel.outputValidNextButton
+//            .asDriver()
+//            .drive(with: self, onNext: { owner, value in
+//                owner.mainView.nextButton.backgroundColor = value ? .systemPink : .lightGray
+//                owner.mainView.nextButton.isEnabled = value
+//            })
+//            .disposed(by: disposeBag)
     }
 }

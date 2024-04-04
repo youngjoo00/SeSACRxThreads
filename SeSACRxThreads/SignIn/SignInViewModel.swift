@@ -11,36 +11,38 @@ import RxCocoa
 
 final class SignInViewModel: BaseViewModel {
     
-    let inputEmail = PublishSubject<String>()
-    let inputPassword = PublishSubject<String>()
+    struct Input {
+        let email: ControlProperty<String?>
+        let password: ControlProperty<String?>
+        let signUpButtonTap: ControlEvent<Void>
+        let signInButtonTap: ControlEvent<Void>
+    }
     
-    let outputEmailValid = BehaviorRelay(value: false)
-    let outputPasswordValid = BehaviorRelay(value: false)
-    let outputSignInValid = BehaviorRelay(value: false)
+    struct Output {
+        let signUpButtonTap: ControlEvent<Void>
+        let signInButtonTap: ControlEvent<Void>
+        let enabled: Driver<Bool>
+    }
     
     override init() {
         super.init()
-        
-        transform()
     }
     
-    private func transform() {
-        Observable.combineLatest(outputEmailValid, outputPasswordValid) { $0 && $1 }
-            .bind(to: outputSignInValid)
-            .disposed(by: disposeBag)
+    func transform(input: Input) -> Output {
         
-        inputEmail
-            .subscribe(with: self) { owner, text in
-                let valid = owner.validateEmail(text)
-                owner.outputEmailValid.accept(valid)
-            }
-            .disposed(by: disposeBag)
+        let email = input.email
+            .orEmpty
+            .map { $0.count >= 8 && $0.contains("@") }
         
-        inputPassword
+        let password = input.password
+            .orEmpty
             .map { $0.count >= 5 }
-            .subscribe(with: self) { owner, value in
-                owner.outputPasswordValid.accept(value)
-            }
-            .disposed(by: disposeBag)
+        
+        let enabled = Observable.combineLatest(email, password) { $0 && $1 }
+            .asDriver(onErrorJustReturn: false)
+        
+        return Output(signUpButtonTap: input.signUpButtonTap,
+                      signInButtonTap: input.signInButtonTap,
+                      enabled: enabled)
     }
 }

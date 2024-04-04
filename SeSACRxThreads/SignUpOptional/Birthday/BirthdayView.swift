@@ -20,7 +20,7 @@ final class BirthdayView: BaseView {
         return picker
     }()
     
-    let infoLabel: UILabel = {
+    let descriptionLabel: UILabel = {
        let label = UILabel()
         label.textColor = Color.black
         label.text = "만 17세 이상만 가입 가능합니다."
@@ -66,7 +66,7 @@ final class BirthdayView: BaseView {
     
     override func configureHierarchy() {
         [
-            infoLabel,
+            descriptionLabel,
             containerStackView,
             birthDayPicker,
             nextButton
@@ -79,13 +79,13 @@ final class BirthdayView: BaseView {
 
     override func configureLayout() {
 
-        infoLabel.snp.makeConstraints {
+        descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(150)
             $0.centerX.equalToSuperview()
         }
         
         containerStackView.snp.makeConstraints {
-            $0.top.equalTo(infoLabel.snp.bottom).offset(30)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(30)
             $0.centerX.equalToSuperview()
         }
         
