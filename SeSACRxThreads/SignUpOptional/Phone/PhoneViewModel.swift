@@ -29,7 +29,7 @@ final class PhoneViewModel: BaseViewModel {
     }
     
     func transform(input: Input) -> Output {
-        let initialPhoneNumber = BehaviorRelay(value: "010")
+        let initialPhoneNumber = BehaviorRelay(value: "")
 
         let valid = input.phone
             .orEmpty
@@ -46,6 +46,7 @@ final class PhoneViewModel: BaseViewModel {
             .asDriver()
         
         input.viewDidLoad
+            .debug()
             .subscribe(with: self) { owner, _ in
                 initialPhoneNumber.accept("010")
             }
@@ -53,6 +54,7 @@ final class PhoneViewModel: BaseViewModel {
         
         let initialPhoneNumberResult = initialPhoneNumber
             .asDriver(onErrorJustReturn: "")
+            .debug()
         
         return Output(valid: valid,
                       description: description,
